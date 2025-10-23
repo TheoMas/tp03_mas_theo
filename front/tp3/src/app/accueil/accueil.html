@@ -1,18 +1,23 @@
-<div class="listePollutionWrapper">
+<div class="accueilContainer">
     <h1>Liste des pollutions</h1>
-    <input type="text" placeholder="Rechercher une pollution..." [(ngModel)]="searchTerm" class="searchInput"/>
+    <input class="searchInput" type="text" placeholder="Rechercher une pollution..." [(ngModel)]="searchTerm"/>
+    <input type="button" (click)="createPollution()" value="Ajouter une pollution" class="addButton"/>
     <div class="pollutionList">
         <div *ngFor="let pollution of getFilteredPollutions()" class="pollutionItem">
             <div class="pollutionInfo">
-                <h2>{{ pollution.nom }}</h2>
-                <p>Lieu: {{ pollution.lieu }}</p>
-                <p>Type: {{ pollution.type }}</p>
-                <p>Date observation: {{ pollution.dateObservation }}</p>
+                <div class="textInfo">
+                    <h2>{{ pollution.nom }}</h2>
+                    <p>Lieu: {{ pollution.lieu }}</p>
+                    <p>Type: {{ pollution.typePollution }}</p>
+                    <p>Date observation: {{ pollution.dateObservation }}</p>
+                </div>
+                <img [src]="pollution.imageUrl" alt="{{ pollution.nom }}" class="pollutionImage"/>
             </div>
-            <img [src]="pollution.imageUrl" alt="{{ pollution.name }}" class="pollutionImage"/>
-            <button (click)="viewDetails(pollution.nom)" class="detailsButton">Voir les détails</button>
-            <button (click)="modifyPollution(pollution.nom)" class="modifyButton">Modifier</button>
-            <button (click)="deletePollution(pollution.nom)" class="deleteButton">Supprimer</button>
+            <div class="buttonsContainer">
+                <button (click)="viewDetails(pollution.id)" class="button detailsButton">Voir les détails</button>
+                <button (click)="modifyPollution(pollution.id)" class="button modifyButton">Modifier</button>
+                <button (click)="deletePollution(pollution.id, pollution.nom)" class="button deleteButton">Supprimer</button>
+            </div>
         </div>
     </div>
 </div>

@@ -1,4 +1,5 @@
 export class Pollution {
+    id: number;
     nom: string;
     lieu: string;
     dateObservation: string;
@@ -8,7 +9,8 @@ export class Pollution {
     longitude: string;
     imageUrl: string;
 
-    constructor(nom: string, lieu: string, dateObservation: string, typePollution: string, niveauPollution: number, description: string, latitude: string, longitude: string, imageUrl: string) {
+    constructor(id: number, nom: string, lieu: string, dateObservation: string, typePollution: string, description: string, latitude: string, longitude: string, imageUrl: string) {
+        this.id = id;
         this.nom = nom;
         this.lieu = lieu;
         this.dateObservation = dateObservation;

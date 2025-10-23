@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { Pollution } from '../../models/pollution';
 
 @Component({
   selector: 'app-accueil',
@@ -11,34 +13,59 @@ import { ApiService } from '../../services/api.service';
 })
 export class Accueil {
   searchTerm: string = '';
-  pollutions: any[] = [];
+  pollutions: Pollution[] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router
+  ) {}
   
   ngOnInit() {
     this.loadPollutions();
   }
 
   loadPollutions() {
-    this.apiService.getPollutions().subscribe(pollutions => {
-      this.pollutions = pollutions;
+    this.apiService.getPollutions().subscribe({
+      next: (pollutions) => {
+        this.pollutions = pollutions;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des pollutions:', error);
+      }
     });
   }
 
-  viewDetails(nom: string) {
-    this.apiService.getPollutionByName(nom).subscribe(pollution => {
-      // Logic to view details of the pollution
-    });
+  viewDetails(Id: number) {
+    // Navigate to details page with the pollution ID as parameter
+    this.router.navigate(['/details', Id]);
   }
 
-  modifyPollution(nom: string) {
-    this.apiService.getPollutionByName(nom).subscribe(pollution => {
-      // Logic to modify the pollution
-    });
+  createPollution() {
+    // Navigate to the pollution form for creating a new pollution
+    this.router.navigate(['/pollution-form']);
   }
 
-  deletePollution(nom: string) {
-    // Logic to delete the pollution
+  modifyPollution(Id: number) {
+    // Navigate to the pollution form with the pollution ID
+    this.router.navigate(['/pollution-form', Id]);
+  }
+
+  deletePollution(Id: number, nom: string) {
+    // Confirm before deleting
+    if (confirm(`Êtes-vous sûr de vouloir supprimer la pollution "${nom}" ?`)) {
+      this.apiService.deletePollution(Id).subscribe({
+        next: () => {
+          console.log('Pollution supprimée avec succès');
+          // Reload the list after deletion
+          this.loadPollutions();
+          alert('Pollution supprimée avec succès');
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression:', error);
+          alert('Erreur lors de la suppression de la pollution');
+        }
+      });
+    }
   }
 
   getFilteredPollutions() {
