@@ -1,0 +1,18 @@
+<div class="listePollutionWrapper">
+    <h1>Liste des pollutions</h1>
+    <input type="text" placeholder="Rechercher une pollution..." [(ngModel)]="searchTerm" class="searchInput"/>
+    <div class="pollutionList">
+        <div *ngFor="let pollution of getFilteredPollutions()" class="pollutionItem">
+            <div class="pollutionInfo">
+                <h2>{{ pollution.nom }}</h2>
+                <p>Lieu: {{ pollution.lieu }}</p>
+                <p>Type: {{ pollution.type }}</p>
+                <p>Date observation: {{ pollution.dateObservation }}</p>
+            </div>
+            <img [src]="pollution.imageUrl" alt="{{ pollution.name }}" class="pollutionImage"/>
+            <button (click)="viewDetails(pollution.nom)" class="detailsButton">Voir les détails</button>
+            <button (click)="modifyPollution(pollution.nom)" class="modifyButton">Modifier</button>
+            <button (click)="deletePollution(pollution.nom)" class="deleteButton">Supprimer</button>
+        </div>
+    </div>
+</div>
